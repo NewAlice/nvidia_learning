@@ -1,0 +1,50 @@
+version: "2.3"
+
+volumes:
+  # Allows us to write files to Triton from JupyterLab
+  model_repository:
+
+services:
+  #Each service is a Docker container. Below is how to pull Triton from NGC.
+  triton:
+    command: "tritonserver --model-repository=/models --exit-on-error=false --model-control-mode=poll --repository-poll-secs=30"
+    image: nvcr.io/nvidia/tritonserver:20.12-py3
+    runtime: nvidia
+    ipc: host
+    shm_size: "1g"
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    ports:
+      - 8000:8000
+      - 8001:8001
+      - 8002:8002
+    volumes:
+      - model_repository:/models
+
+  # This is the JupyterLab environment. We build it with a Dockerfile.
+  lab:
+    build: .
+    runtime: nvidia
+    environment:
+      - JUPYTER_TOKEN
+
+    volumes:
+      - ./task/:/dli/task/
+      - model_repository:/dli/task/models
+
+  # Prometheus
+  prometheus:
+    image: docker.io/prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/prometheus.yml
+    command:
+      - "--config.file=/prometheus.yml"
+    ports:
+      - 9090:9090
+
+  # Nginx is how we make the container available to sudents over the internet.
+  nginx:
+    image: nginx:1.15.12-alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
