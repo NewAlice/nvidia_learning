@@ -1,0 +1,12 @@
+jupyter==1.0.0
+tqdm==4.66.4
+langchain-nvidia-ai-endpoints==0.2.2
+langchain-community==0.2.17
+langchain==0.2.16
+langgraph==0.2.21
+Wikipedia-API==0.7.1
+gradio==4.44.0
+grandalf==0.8
+contractions==0.1.73
+openai==1.51.2
+httpx==0.27.2
