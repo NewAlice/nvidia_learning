@@ -1,0 +1,8 @@
+pyyaml>=6.0
+cartopy
+earth2studio[sfno] @ git+https://github.com/swbg/earth2studio.git@dc0ea7965d1c8a35a8c43550fba1ec657e278cb6
+ipywidgets
+makani[all] @ git+https://github.com/NVIDIA/modulus-makani.git@v0.1.1
+opencv-python==4.8.0.74
+seaborn
+windpowerlib==0.2.2
